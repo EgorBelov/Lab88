@@ -263,8 +263,21 @@ class Program
                 {
                     bullets[i].Y -= 1;
 
+                    // Проверка на столкновение с врагами
+                    for (int j = 0; j < enemies.Count; j++)
+                    {
+                        if (bullets[i].X == enemies[j].X && bullets[i].Y == enemies[j].Y)
+                        {
+                            score += 10; // Увеличиваем счет при попадании
+                            bullets.RemoveAt(i);
+                            i--;
+                            enemies.RemoveAt(j);
+                            break;
+                        }
+                    }
+
                     // Удаляем старые выстрелы
-                    if (bullets[i].Y <= 0)
+                    if (i >= 0 && i < bullets.Count && bullets[i].Y <= 0)
                     {
                         bullets.RemoveAt(i);
                         i--;
@@ -284,7 +297,7 @@ class Program
                     }
 
                     // Удаляем старые выстрелы
-                    if (enemyBullets[i].Y >= Console.WindowHeight - 1)
+                    if (i >= 0 && i < enemyBullets.Count && enemyBullets[i].Y >= Console.WindowHeight - 1)
                     {
                         enemyBullets.RemoveAt(i);
                         i--;
@@ -295,6 +308,8 @@ class Program
             Thread.Sleep(50);
         }
     }
+
+
 
     static void RenderPlayer()
     {
